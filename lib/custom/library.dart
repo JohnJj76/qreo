@@ -2,15 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:loading_indicator/loading_indicator.dart';
 import 'package:overlay_loading_progress/overlay_loading_progress.dart';
+import 'package:qreo/pages/orion/verif_orion.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:qreo/custom/constants.dart';
 import 'package:qreo/pages/eros/form_eros.dart';
 import 'package:qreo/pages/eros/verif_eros.dart';
 import 'package:qreo/pages/orion/form_orion.dart';
-import 'package:qreo/pages/splash_page.dart';
+import 'package:qreo/pages/login/splash_page.dart';
 import 'package:qreo/widgets/loading.dart';
 
-enum CustomPage { splash, formEros, formOrion, verifEros }
+enum CustomPage { splash, formEros, formOrion, verifEros, verifOrion }
 
 enum TypeAnimation { transition }
 
@@ -62,27 +63,13 @@ navigate(
       );
       break;
 
-    /*
-    case CustomPage.home:
+    case CustomPage.verifOrion:
       Navigator.pushAndRemoveUntil(
         globalContext!,
-        _goPage(const HomePage(), TypeAnimation.transition, 500),
+        _goPage(const VerifOrion(), TypeAnimation.transition, 500),
         (Route<dynamic> route) => false,
       );
       break;
-      case CustomPage.formCountry:
-      Navigator.push(
-        globalContext!,
-        _goPage(const FormCountryPage(), TypeAnimation.transition, 500),
-      );
-      break;*/
-
-    /*case CustomPage.formNotas:
-      Navigator.push(
-        globalContext!,
-        _goPage(const FormNotasPage(), TypeAnimation.transition, 500),
-      );
-      break;*/
     default:
   }
 }

@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:qreo/auth/auth_service.dart';
 import 'package:qreo/custom/constants.dart';
 import 'package:qreo/custom/library.dart';
-import 'package:qreo/models/qro_models.dart';
+import 'package:qreo/models/qre_models.dart';
 import 'package:qreo/providers/orionqr_provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart.';
 import 'package:intl/intl.dart';
@@ -19,7 +19,7 @@ class HomeqrOrion extends StatefulWidget {
 class _HomeqrOrionState extends State<HomeqrOrion> {
   final authService = AuthService();
 
-  Qross mQros = Qross();
+  Qress mQros = Qress();
 
   @override
   void initState() {
@@ -36,15 +36,12 @@ class _HomeqrOrionState extends State<HomeqrOrion> {
 
   getQrOrion() async {
     final mSupabase = Supabase.instance.client;
-
     final mResult = await mSupabase
         .from('orionqr')
         .select()
         .eq('revisado', false)
         .order('fecha', ascending: true);
-
-    mQros = Qross.fromJsonList(mResult);
-
+    mQros = Qress.fromJsonList(mResult);
     setState(() {});
   }
 
@@ -74,7 +71,7 @@ class _HomeqrOrionState extends State<HomeqrOrion> {
                   onPressed: () async {
                     globalContext = context;
                     Provider.of<OrionQrProvider>(context, listen: false).mQro =
-                        QrOrion();
+                        QrEros();
                     navigate(globalContext!, CustomPage.formOrion);
                   },
                   icon: Padding(

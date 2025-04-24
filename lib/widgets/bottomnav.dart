@@ -4,6 +4,7 @@ import 'package:qreo/custom/constants.dart';
 import 'package:qreo/pages/eros/homeqr_eros.dart';
 import 'package:qreo/pages/eros/verif_eros.dart';
 import 'package:qreo/pages/orion/homeqr_orion.dart';
+import 'package:qreo/pages/orion/verif_orion.dart';
 import 'package:qreo/subir_fotos/upload_page.dart';
 
 class BottomNav extends StatefulWidget {
@@ -18,7 +19,7 @@ class _BottomNavState extends State<BottomNav> {
   late HomeqrEros moteleros;
   late HomeqrOrion motelorion;
   late VerifEros verifEros;
-  late UploadPage subir;
+  late VerifOrion verifOrion;
 
   int currentTabIndex = 0;
 
@@ -27,8 +28,8 @@ class _BottomNavState extends State<BottomNav> {
     moteleros = HomeqrEros();
     motelorion = HomeqrOrion();
     verifEros = VerifEros();
-    subir = UploadPage();
-    pages = [moteleros, motelorion, verifEros, subir];
+    verifOrion = VerifOrion();
+    pages = [moteleros, motelorion, verifEros, verifOrion];
     super.initState();
   }
 
@@ -47,10 +48,10 @@ class _BottomNavState extends State<BottomNav> {
           });
         },
         items: [
-          Icon(Icons.home, color: Colors.white, size: 30.0),
-          Icon(Icons.post_add, color: Colors.white, size: 30.0),
-          Icon(Icons.shopping_bag, color: Colors.white, size: 30.0),
-          Icon(Icons.person, color: Colors.white, size: 30.0),
+          Image.asset('assets/imagenes/ic_eros.png', width: 60, height: 40),
+          Image.asset('assets/imagenes/ic_orion.png', width: 60, height: 40),
+          Icon(Icons.bookmark_added_sharp, color: Colors.white, size: 40),
+          Icon(Icons.checklist, color: Colors.white, size: 40),
         ],
       ),
       body: pages[currentTabIndex],

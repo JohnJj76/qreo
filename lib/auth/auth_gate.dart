@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:qreo/pages/loginII_page.dart';
+import 'package:qreo/pages/login/login_page.dart';
 import 'package:qreo/widgets/bottomnav.dart';
 import 'package:supabase_flutter/supabase_flutter.dart.';
 
@@ -18,14 +18,11 @@ class AuthGate extends StatelessWidget {
         }
         //
         final session = snapshot.hasData ? snapshot.data!.session : null;
-
+        //
         if (session != null) {
-          //return ProfilePage();
-          //return HomeNotas();
-          //return FormCountryPage();
           return BottomNav();
         } else {
-          return LoginIIPage();
+          return LoginPage();
         }
       },
     );

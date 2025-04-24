@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:qreo/auth/auth_service.dart';
-import 'package:qreo/pages/login_page.dart';
+import 'package:qreo/pages/login/login_page.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});

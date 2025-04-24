@@ -4,8 +4,7 @@ import 'package:qreo/auth/auth_gate.dart';
 import 'package:qreo/custom/configurations.dart';
 import 'package:qreo/custom/library.dart';
 import 'package:qreo/providers/erosqr_provider.dart';
-import 'package:qreo/providers/global_provider.dart';
-import 'package:qreo/providers/notas_provider.dart';
+
 import 'package:qreo/providers/orionqr_provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -18,8 +17,6 @@ Future<void> main() async {
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => GlobalProvider()),
-        ChangeNotifierProvider(create: (_) => NotasProvider()),
         ChangeNotifierProvider(create: (_) => ErosQrProvider()),
         ChangeNotifierProvider(create: (_) => OrionQrProvider()),
       ],
@@ -42,9 +39,6 @@ class MyApp extends StatelessWidget {
       ),
       //home: const SplashPage(),
       home: AuthGate(),
-      //home: HomeNotame(),
-      //home: UploadPage(),
-      //home: BottomNav(),
     );
   }
 }

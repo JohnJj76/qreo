@@ -6,14 +6,14 @@ import 'package:qreo/custom/library.dart';
 import 'package:qreo/models/qre_models.dart';
 import 'package:supabase_flutter/supabase_flutter.dart.';
 
-class VerifEros extends StatefulWidget {
-  const VerifEros({super.key});
+class VerifOrion extends StatefulWidget {
+  const VerifOrion({super.key});
 
   @override
-  State<VerifEros> createState() => _VerifErosState();
+  State<VerifOrion> createState() => _VerifOrionState();
 }
 
-class _VerifErosState extends State<VerifEros> {
+class _VerifOrionState extends State<VerifOrion> {
   Qress mQres = Qress();
 
   @override
@@ -21,14 +21,14 @@ class _VerifErosState extends State<VerifEros> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       FocusScope.of(context).requestFocus(FocusNode());
-      getQrEros();
+      getQrOrion();
     });
   }
 
-  getQrEros() async {
+  getQrOrion() async {
     final mSupabase = Supabase.instance.client;
     final mResult = await mSupabase
-        .from('erosqr')
+        .from('orionqr')
         .select()
         .eq('revisado', true)
         .order('fecha', ascending: true);
@@ -46,7 +46,7 @@ class _VerifErosState extends State<VerifEros> {
         leading: Container(
           padding: EdgeInsets.symmetric(horizontal: 15),
           child: Image.asset(
-            'assets/imagenes/logo1.png',
+            'assets/imagenes/logo2.png',
             width: 50,
             fit: BoxFit.contain,
           ),
@@ -75,7 +75,7 @@ class _VerifErosState extends State<VerifEros> {
           onRefresh: () async {
             if (mounted) {
               globalContext = context;
-              getQrEros();
+              getQrOrion();
             }
           },
           child: SizedBox(

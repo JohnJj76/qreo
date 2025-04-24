@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:qreo/auth/auth_service.dart';
-import 'package:qreo/pages/register_page.dart';
+import 'package:qreo/custom/constants.dart';
+import 'package:qreo/pages/login/register_page.dart';
+import 'package:qreo/widgets/custom_button.dart';
 
-class LoginIIPage extends StatefulWidget {
-  const LoginIIPage({super.key});
+class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
 
   @override
-  State<LoginIIPage> createState() => _LoginIIPageState();
+  State<LoginPage> createState() => _LoginPageState();
 }
 
-class _LoginIIPageState extends State<LoginIIPage> {
+class _LoginPageState extends State<LoginPage> {
   final formKey = GlobalKey<FormState>();
   final authService = AuthService();
   final TextEditingController _emailController = TextEditingController();
@@ -30,9 +32,90 @@ class _LoginIIPageState extends State<LoginIIPage> {
   }
 
   //
+  autorizarRegistro() {
+    return showModalBottomSheet(
+      context: context,
+      enableDrag: true,
+      backgroundColor: Constants.colorBackgroundPanel,
+      builder: (BuildContext context) {
+        return Container(
+          color: Constants.colorBackgroundPanel,
+          margin: const EdgeInsets.only(
+            left: 20,
+            right: 20,
+            top: 20,
+            bottom: 40,
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SizedBox(
+                width: double.infinity,
+                child: Text(
+                  'Autorizar Registro',
+                  style: Constants.textStyleAccentTitle,
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              const SizedBox(height: 10),
+              SizedBox(
+                child: Text(
+                  'Digite el codigo para registrar usuario.',
+                  style: Constants.textStyleLight,
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              const SizedBox(height: 30),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Flexible(
+                    flex: 1,
+                    child: CustomButton(
+                      width: double.infinity,
+                      color: Constants.colorBlack,
+                      callback: () => Navigator.pop(context),
+                      child: Text(
+                        "Atrás",
+                        style: Constants.textStyleAccentSemiBold,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 20),
+                  Flexible(
+                    flex: 1,
+                    child: CustomButton(
+                      width: double.infinity,
+                      color: Constants.colorAccent,
+                      callback: () {
+                        /* deleteNota();
+                        Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(builder: (context) => BottomNav()),
+                          (Route<dynamic> route) => false,
+                        );*/
+                      },
+                      child: Text(
+                        "Eliminar",
+                        style: Constants.textStyleBlackBold,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  //
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Constants.colorLogin,
       body: Form(
         key: formKey,
         child: Center(
@@ -42,7 +125,7 @@ class _LoginIIPageState extends State<LoginIIPage> {
               SizedBox(
                 width: MediaQuery.of(context).size.width * .9,
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     const Text(
                       "Login",
@@ -51,8 +134,12 @@ class _LoginIIPageState extends State<LoginIIPage> {
                         fontWeight: FontWeight.w700,
                       ),
                     ),
-                    const Text("Bienvenido a la aplicación."),
-                    const SizedBox(height: 10),
+                    Image.asset(
+                      'assets/imagenes/logoapp.png',
+                      width: 300,
+                      height: 300,
+                    ),
+
                     SizedBox(
                       width: MediaQuery.of(context).size.width * .9,
                       child: TextFormField(
@@ -117,14 +204,14 @@ class _LoginIIPageState extends State<LoginIIPage> {
                         ),
                         SizedBox(width: 2),
                         TextButton(
-                          onPressed: () {
-                            Navigator.push(
+                          onPressed: autorizarRegistro,
+
+                          /*Navigator.push(
                               context,
                               MaterialPageRoute(
                                 builder: (context) => const RegisterPage(),
                               ),
-                            );
-                          },
+                            );*/
                           child: const Text(
                             "Registrate",
                             style: TextStyle(
