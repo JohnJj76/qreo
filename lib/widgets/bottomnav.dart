@@ -48,10 +48,10 @@ class _BottomNavState extends State<BottomNav> {
           });
         },
         items: [
-          Image.asset('assets/imagenes/ic_eros.png', width: 60, height: 40),
-          Image.asset('assets/imagenes/ic_orion.png', width: 60, height: 40),
-          Icon(Icons.bookmark_added_sharp, color: Colors.white, size: 40),
-          Icon(Icons.checklist, color: Colors.white, size: 40),
+          Image.asset('assets/imagenes/ico_qre.png', width: 60, height: 40),
+          Image.asset('assets/imagenes/ico_qro.png', width: 60, height: 40),
+          Image.asset('assets/imagenes/re1.png', width: 50, height: 30),
+          Image.asset('assets/imagenes/re2.png', width: 50, height: 30),
         ],
       ),
       body: pages[currentTabIndex],

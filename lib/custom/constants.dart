@@ -15,6 +15,7 @@ class Constants {
   static Color colorFondo2 = HexColor.fromHex('#F8BBD0');
   static Color revisadoEros = HexColor.fromHex('#90EE90');
   static Color colorLogin = HexColor.fromHex('#FFB6C1');
+  static Color colorMensaje = HexColor.fromHex('#808080');
 
   static Color colorAccent = HexColor.fromHex('#02dfbb');
   static Color colorPrimary = HexColor.fromHex('#9E3CE8');

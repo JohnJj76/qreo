@@ -85,20 +85,10 @@ class _FormErosState extends State<FormEros> {
               context,
               listen: false,
             ).mQre.mRevisado.toString();
-
-    /*
-    mRevisadoController.text =
-        Provider.of<ErosQrProvider>(
-          context,
-          listen: false,
-        ).mQre.mRevisado.toString() ??
-        '0';*/
     //
     final currentEmail = authService.getCurrentUserEmail();
     mEmpleadoController = TextEditingController();
     mEmpleadoController.text = currentEmail.toString();
-    //Provider.of<ErosQrProvider>(context, listen: false).mQre.mEmpleado ??
-    //currentEmail.toString();
   }
 
   @override
@@ -508,7 +498,7 @@ class _FormErosState extends State<FormEros> {
                             ),
                           ),
                           const SizedBox(height: 10),
-                          jhMySwitch(ancho: 105, estado: cRevisado),
+                          jhMySwitch(ancho: 90, estado: cRevisado),
                           const SizedBox(height: 20),
                           Padding(
                             padding: const EdgeInsets.symmetric(

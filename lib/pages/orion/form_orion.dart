@@ -500,7 +500,7 @@ class _FormOrionState extends State<FormOrion> {
                             ),
                           ),
                           const SizedBox(height: 10),
-                          jhMySwitch(ancho: 105, estado: cRevisado),
+                          jhMySwitch(ancho: 90, estado: cRevisado),
                           const SizedBox(height: 20),
                           Padding(
                             padding: const EdgeInsets.symmetric(

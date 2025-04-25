@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:qreo/auth/auth_service.dart';
 import 'package:qreo/custom/constants.dart';
+import 'package:qreo/custom/validation.dart';
 import 'package:qreo/pages/login/register_page.dart';
 import 'package:qreo/widgets/custom_button.dart';
+import 'package:qreo/widgets/custom_input.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -17,6 +19,9 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   //
+  final TextEditingController _mControlController = TextEditingController();
+  Validation mValidation = Validation();
+
   void login() async {
     final email = _emailController.text;
     final password = _passwordController.text;
@@ -36,25 +41,29 @@ class _LoginPageState extends State<LoginPage> {
     return showModalBottomSheet(
       context: context,
       enableDrag: true,
-      backgroundColor: Constants.colorBackgroundPanel,
+      backgroundColor: Constants.colorMensaje,
       builder: (BuildContext context) {
         return Container(
-          color: Constants.colorBackgroundPanel,
+          color: Constants.colorMensaje,
           margin: const EdgeInsets.only(
             left: 20,
             right: 20,
             top: 20,
-            bottom: 40,
+            bottom: 30,
           ),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
             children: [
               SizedBox(
                 width: double.infinity,
                 child: Text(
                   'Autorizar Registro',
-                  style: Constants.textStyleAccentTitle,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 22,
+                    color: Colors.black,
+                  ),
                   textAlign: TextAlign.center,
                 ),
               ),
@@ -67,42 +76,50 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
               const SizedBox(height: 30),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Flexible(
-                    flex: 1,
-                    child: CustomButton(
-                      width: double.infinity,
-                      color: Constants.colorBlack,
-                      callback: () => Navigator.pop(context),
-                      child: Text(
-                        "Atrás",
-                        style: Constants.textStyleAccentSemiBold,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 20),
-                  Flexible(
-                    flex: 1,
-                    child: CustomButton(
-                      width: double.infinity,
-                      color: Constants.colorAccent,
-                      callback: () {
-                        /* deleteNota();
-                        Navigator.pushAndRemoveUntil(
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 100),
+                child: CustomInput(
+                  //title: 'Valor',
+                  obscurePassword: true,
+                  controller: _mControlController,
+                  textInputType: TextInputType.number,
+                  validator: (value) {
+                    return mValidation.validate(
+                      type: TypeValidation.varchar,
+                      name: 'clave',
+                      value: _mControlController.text,
+                      isRequired: false,
+                      max: 6,
+                    );
+                  },
+                ),
+              ),
+              const SizedBox(height: 16),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 100),
+                child: Flexible(
+                  flex: 1,
+                  child: CustomButton(
+                    width: double.infinity,
+                    color: Constants.colorAccent,
+                    callback: () {
+                      if (_mControlController.text == "157676") {
+                        Navigator.pop(context);
+                        Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => BottomNav()),
-                          (Route<dynamic> route) => false,
-                        );*/
-                      },
-                      child: Text(
-                        "Eliminar",
-                        style: Constants.textStyleBlackBold,
-                      ),
-                    ),
+                          MaterialPageRoute(
+                            builder: (context) => const RegisterPage(),
+                          ),
+                        );
+                        _mControlController.text = "";
+                      } else {
+                        Navigator.pop(context);
+                        _mControlController.text = "";
+                      }
+                    },
+                    child: Text("Accesar", style: Constants.textStyleBlackBold),
                   ),
-                ],
+                ),
               ),
             ],
           ),
@@ -130,14 +147,14 @@ class _LoginPageState extends State<LoginPage> {
                     const Text(
                       "Login",
                       style: TextStyle(
-                        fontSize: 40,
+                        fontSize: 20,
                         fontWeight: FontWeight.w700,
                       ),
                     ),
                     Image.asset(
                       'assets/imagenes/logoapp.png',
-                      width: 300,
-                      height: 300,
+                      width: 200,
+                      height: 200,
                     ),
 
                     SizedBox(
@@ -149,13 +166,26 @@ class _LoginPageState extends State<LoginPage> {
                                     ? "El correo no puede estar vacio."
                                     : null,
                         controller: _emailController,
-                        decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
+                        decoration: InputDecoration(
                           label: Text("Email"),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(16),
+                            borderSide: const BorderSide(
+                              color: Colors.black,
+                              width: 2.5,
+                            ),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(16),
+                            borderSide: const BorderSide(
+                              color: Colors.black,
+                              width: 1.5,
+                            ),
+                          ),
                         ),
                       ),
                     ),
-                    SizedBox(height: 15),
+                    SizedBox(height: 18),
                     SizedBox(
                       width: MediaQuery.of(context).size.width * .9,
                       child: TextFormField(
@@ -166,13 +196,26 @@ class _LoginPageState extends State<LoginPage> {
                                     : null,
                         controller: _passwordController,
                         obscureText: true,
-                        decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
+                        decoration: InputDecoration(
                           label: Text("Password"),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(16),
+                            borderSide: const BorderSide(
+                              color: Colors.black,
+                              width: 2.5,
+                            ),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(16),
+                            borderSide: const BorderSide(
+                              color: Colors.black,
+                              width: 1.5,
+                            ),
+                          ),
                         ),
                       ),
                     ),
-                    SizedBox(height: 30),
+                    SizedBox(height: 25),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -205,13 +248,6 @@ class _LoginPageState extends State<LoginPage> {
                         SizedBox(width: 2),
                         TextButton(
                           onPressed: autorizarRegistro,
-
-                          /*Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const RegisterPage(),
-                              ),
-                            );*/
                           child: const Text(
                             "Registrate",
                             style: TextStyle(

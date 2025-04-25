@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:intl/intl.dart';
+import 'package:qreo/auth/auth_service.dart';
 import 'package:qreo/custom/constants.dart';
 import 'package:qreo/custom/library.dart';
 import 'package:qreo/models/qre_models.dart';
@@ -14,6 +15,7 @@ class VerifOrion extends StatefulWidget {
 }
 
 class _VerifOrionState extends State<VerifOrion> {
+  final authService = AuthService();
   Qress mQres = Qress();
 
   @override
@@ -23,6 +25,10 @@ class _VerifOrionState extends State<VerifOrion> {
       FocusScope.of(context).requestFocus(FocusNode());
       getQrOrion();
     });
+  }
+
+  void loggout() async {
+    await authService.signOut();
   }
 
   getQrOrion() async {
@@ -59,7 +65,10 @@ class _VerifOrionState extends State<VerifOrion> {
             children: [
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 20),
-                child: GestureDetector(onTap: () {}, child: Icon(Icons.logout)),
+                child: GestureDetector(
+                  onTap: loggout,
+                  child: Icon(Icons.logout),
+                ),
               ),
             ],
           ),
@@ -138,7 +147,7 @@ class _VerifOrionState extends State<VerifOrion> {
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     SizedBox(
-                                      width: 60,
+                                      width: 50,
                                       height: 100,
                                       child: Container(
                                         width: 20,
@@ -174,12 +183,12 @@ class _VerifOrionState extends State<VerifOrion> {
                                                   overflow:
                                                       TextOverflow.ellipsis,
                                                 ),
-                                                SizedBox(width: 20),
+                                                SizedBox(width: 16),
                                                 Text(
                                                   'Valor : ${f.format(mQres.items[index].mValor!)}',
                                                   style: const TextStyle(
                                                     color: Colors.black,
-                                                    fontSize: 18,
+                                                    fontSize: 16,
                                                     fontWeight: FontWeight.bold,
                                                   ),
                                                 ),
@@ -190,7 +199,7 @@ class _VerifOrionState extends State<VerifOrion> {
                                       ),
                                     ),
                                     SizedBox(
-                                      width: 50,
+                                      width: 40,
                                       height: 70,
                                       child: Container(
                                         width: 40,

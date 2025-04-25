@@ -175,7 +175,7 @@ class _HomeqrErosState extends State<HomeqrEros> {
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     SizedBox(
-                                      width: 70,
+                                      width: 60,
                                       height: 100,
                                       child: Container(
                                         width: 40,
@@ -243,17 +243,16 @@ class _HomeqrErosState extends State<HomeqrEros> {
                                                 Text(
                                                   mQres.items[index].mEmpleado!,
                                                   style: TextStyle(
-                                                    color: Colors.white70,
-                                                    fontSize: 12,
-                                                    fontWeight:
-                                                        FontWeight.normal,
+                                                    color: Colors.grey,
+                                                    fontSize: 14,
+                                                    fontWeight: FontWeight.bold,
                                                   ),
                                                 ),
                                                 SizedBox(width: 10),
                                                 Text(
                                                   'Fra. # ${n.format(mQres.items[index].mFactura!)}',
                                                   style: const TextStyle(
-                                                    color: Colors.white70,
+                                                    color: Colors.grey,
                                                     fontSize: 14,
                                                     fontWeight: FontWeight.bold,
                                                   ),

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:intl/intl.dart';
+import 'package:qreo/auth/auth_service.dart';
 import 'package:qreo/custom/constants.dart';
 import 'package:qreo/custom/library.dart';
 import 'package:qreo/models/qre_models.dart';
+import 'package:qreo/widgets/custom_button.dart';
 import 'package:supabase_flutter/supabase_flutter.dart.';
 
 class VerifEros extends StatefulWidget {
@@ -14,6 +16,7 @@ class VerifEros extends StatefulWidget {
 }
 
 class _VerifErosState extends State<VerifEros> {
+  final authService = AuthService();
   Qress mQres = Qress();
 
   @override
@@ -23,6 +26,10 @@ class _VerifErosState extends State<VerifEros> {
       FocusScope.of(context).requestFocus(FocusNode());
       getQrEros();
     });
+  }
+
+  void loggout() async {
+    await authService.signOut();
   }
 
   getQrEros() async {
@@ -51,16 +58,50 @@ class _VerifErosState extends State<VerifEros> {
             fit: BoxFit.contain,
           ),
         ),
-        title: Text("QRs Revisados"),
+        title: Text("Revisados"),
         leadingWidth: 140,
         actions: [
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 20),
-                child: GestureDetector(onTap: () {}, child: Icon(Icons.logout)),
+              CustomButton(
+                color: Colors.transparent,
+                width: 40,
+                callback: () async {
+                  /*globalContext = context;
+                  deleteConfirmation(
+                    context: globalContext!,
+                    mQr:
+                        Provider.of<ErosQrProvider>(
+                          context,
+                          listen: false,
+                        ).mQre.mIdx!,
+                  );*/
+                },
+                child: Icon(
+                  TablerIcons.trash,
+                  color: Constants.colorBlack,
+                  size: 30,
+                ),
               ),
+              CustomButton(
+                color: Colors.transparent,
+                width: 40,
+                callback: loggout,
+                child: Icon(
+                  TablerIcons.logout,
+                  color: Constants.colorBlack,
+                  size: 30,
+                ),
+              ),
+
+              /*Container(
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                child: GestureDetector(
+                  onTap: loggout,
+                  child: Icon(Icons.logout),
+                ),
+              ),*/
             ],
           ),
         ],
@@ -138,7 +179,7 @@ class _VerifErosState extends State<VerifEros> {
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     SizedBox(
-                                      width: 60,
+                                      width: 50,
                                       height: 100,
                                       child: Container(
                                         width: 20,
@@ -174,12 +215,12 @@ class _VerifErosState extends State<VerifEros> {
                                                   overflow:
                                                       TextOverflow.ellipsis,
                                                 ),
-                                                SizedBox(width: 20),
+                                                SizedBox(width: 16),
                                                 Text(
                                                   'Valor : ${f.format(mQres.items[index].mValor!)}',
                                                   style: const TextStyle(
                                                     color: Colors.black,
-                                                    fontSize: 18,
+                                                    fontSize: 16,
                                                     fontWeight: FontWeight.bold,
                                                   ),
                                                 ),
@@ -190,7 +231,7 @@ class _VerifErosState extends State<VerifEros> {
                                       ),
                                     ),
                                     SizedBox(
-                                      width: 50,
+                                      width: 40,
                                       height: 70,
                                       child: Container(
                                         width: 40,
@@ -216,6 +257,12 @@ class _VerifErosState extends State<VerifEros> {
           ),
         ),
       ),
+      /*
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        onPressed: () {},
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.startDocked,*/
     );
   }
 }
