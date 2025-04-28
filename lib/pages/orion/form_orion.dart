@@ -12,7 +12,8 @@ import 'package:qreo/providers/orionqr_provider.dart';
 import 'package:qreo/widgets/bottomnav.dart';
 import 'package:qreo/widgets/custom_button.dart';
 import 'package:qreo/widgets/custom_input.dart';
-import 'package:qreo/widgets/navbar_back.dart';
+import 'package:qreo/widgets/custom_num.dart';
+import 'package:qreo/widgets/navbar2_back.dart';
 import 'package:supabase_flutter/supabase_flutter.dart.';
 
 class FormOrion extends StatefulWidget {
@@ -332,17 +333,22 @@ class _FormOrionState extends State<FormOrion> {
   @override
   Widget build(BuildContext context) {
     final currentEmail = authService.getCurrentUserEmail();
+    bool bandera = false;
+    if (currentEmail.toString() == 'german@gmail.com') {
+      bandera = true;
+    }
+    ;
     return Scaffold(
       backgroundColor: Constants.colorFondo2,
-      appBar: NavbarBack(
+      appBar: Navbar2Back(
         backgroundColor: Constants.colorFondo2,
         backgroundButtonColor: Constants.colorFondo2,
         tinte: Tinte.light,
         title:
             Provider.of<OrionQrProvider>(context, listen: false).mQro.mIdx ==
                     null
-                ? "Nuevo QR"
-                : "Editar QR",
+                ? "Agregar nuevo QR"
+                : "Editar actual QR",
         showBack: true,
         mListActions: [
           Provider.of<OrionQrProvider>(context, listen: false).mQro.mIdx == null
@@ -466,7 +472,7 @@ class _FormOrionState extends State<FormOrion> {
                           const SizedBox(height: 10),
                           Padding(
                             padding: EdgeInsets.symmetric(horizontal: 100),
-                            child: CustomInput(
+                            child: CustomNum(
                               title: 'Factura',
                               controller: mFacturaController,
                               textInputType: TextInputType.number,
@@ -484,7 +490,7 @@ class _FormOrionState extends State<FormOrion> {
                           const SizedBox(height: 10),
                           Padding(
                             padding: EdgeInsets.symmetric(horizontal: 100),
-                            child: CustomInput(
+                            child: CustomNum(
                               title: 'Valor',
                               controller: mValorController,
                               textInputType: TextInputType.number,
@@ -500,7 +506,9 @@ class _FormOrionState extends State<FormOrion> {
                             ),
                           ),
                           const SizedBox(height: 10),
-                          jhMySwitch(ancho: 90, estado: cRevisado),
+                          bandera
+                              ? jhMySwitch(ancho: 90, estado: cRevisado)
+                              : Text("--------------------------"),
                           const SizedBox(height: 20),
                           Padding(
                             padding: const EdgeInsets.symmetric(

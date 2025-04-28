@@ -5,6 +5,8 @@ import 'package:qreo/auth/auth_service.dart';
 import 'package:qreo/custom/constants.dart';
 import 'package:qreo/custom/library.dart';
 import 'package:qreo/models/qre_models.dart';
+import 'package:qreo/widgets/bottomnav.dart';
+import 'package:qreo/widgets/custom_button.dart';
 import 'package:supabase_flutter/supabase_flutter.dart.';
 
 class VerifOrion extends StatefulWidget {
@@ -43,31 +45,185 @@ class _VerifOrionState extends State<VerifOrion> {
   }
 
   //
+  confirmarBorrar() {
+    return showModalBottomSheet(
+      context: context,
+      enableDrag: true,
+      backgroundColor: Constants.colorBackgroundPanel,
+      builder: (BuildContext context) {
+        return Container(
+          color: Constants.colorBackgroundPanel,
+          margin: const EdgeInsets.only(
+            left: 20,
+            right: 20,
+            top: 20,
+            bottom: 40,
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SizedBox(
+                width: double.infinity,
+                child: Text(
+                  'Borrar todos los Qrs',
+                  style: Constants.textStyleAccentTitle,
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              const SizedBox(height: 10),
+              SizedBox(
+                child: Text(
+                  '¿Confirmas borrar todos los qrs de la lista?',
+                  style: Constants.textStyleLight,
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              const SizedBox(height: 30),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Flexible(
+                    flex: 1,
+                    child: CustomButton(
+                      width: double.infinity,
+                      color: Constants.colorBlack,
+                      callback: () => Navigator.pop(context),
+                      child: Text(
+                        "Cancelar",
+                        style: Constants.textStyleAccentSemiBold,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 20),
+                  Flexible(
+                    flex: 1,
+                    child: CustomButton(
+                      width: double.infinity,
+                      color: Constants.colorAccent,
+                      callback: () {
+                        llenarListaBorrar();
+                        Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(builder: (context) => BottomNav()),
+                          (Route<dynamic> route) => false,
+                        );
+                      },
+                      child: Text(
+                        "Aceptar",
+                        style: Constants.textStyleBlackBold,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  //
+  llenarListaBorrar() async {
+    final mSupabase = Supabase.instance.client;
+    int contar = 0;
+    final mResult = await mSupabase
+        .from('orionqr')
+        .select()
+        .eq('revisado', true)
+        .order('fecha', ascending: true);
+    mQres = Qress.fromJsonList(mResult);
+
+    mQres.items.forEach((doc) async {
+      contar = contar + 1;
+      deleteTask(doc.mIdx.toString());
+    });
+  }
+
+  //
+  Future<void> deleteTask(String taskId) async {
+    final supabase = Supabase.instance.client;
+    await supabase.from('orionqr').delete().eq('idx', taskId);
+  }
+
+  //
   @override
   Widget build(BuildContext context) {
+    final currentEmail = authService.getCurrentUserEmail();
     return Scaffold(
       backgroundColor: Constants.colorFondo1,
       appBar: AppBar(
         backgroundColor: Constants.colorFondo1,
-        leading: Container(
-          padding: EdgeInsets.symmetric(horizontal: 15),
-          child: Image.asset(
-            'assets/imagenes/logo2.png',
-            width: 50,
-            fit: BoxFit.contain,
-          ),
+        leading: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 15),
+              child: Image.asset(
+                'assets/imagenes/logo2.png',
+                width: 90,
+                fit: BoxFit.cover,
+              ),
+            ),
+          ],
         ),
-        title: Text("QRs Revisados"),
-        leadingWidth: 140,
+        title: Column(
+          children: [
+            Container(
+              padding: EdgeInsets.only(),
+              child: Text(
+                "Revisados",
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ),
+            Container(
+              padding: EdgeInsets.only(),
+              child: Text(
+                currentEmail.toString(),
+                style: TextStyle(
+                  color: Colors.grey,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ],
+        ),
+        leadingWidth: 120,
+        toolbarHeight: 80,
         actions: [
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 20),
-                child: GestureDetector(
-                  onTap: loggout,
-                  child: Icon(Icons.logout),
+              CustomButton(
+                color: Colors.transparent,
+                width: 40,
+                callback: () async {
+                  globalContext = context;
+                  confirmarBorrar();
+                },
+                child: Icon(
+                  TablerIcons.trash,
+                  color: Constants.colorBlack,
+                  size: 30,
+                ),
+              ),
+              CustomButton(
+                color: Colors.transparent,
+                width: 40,
+                callback: loggout,
+                child: Icon(
+                  TablerIcons.logout,
+                  color: Constants.colorBlack,
+                  size: 30,
                 ),
               ),
             ],

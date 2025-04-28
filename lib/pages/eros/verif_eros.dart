@@ -1,10 +1,15 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
+import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:qreo/auth/auth_service.dart';
 import 'package:qreo/custom/constants.dart';
 import 'package:qreo/custom/library.dart';
 import 'package:qreo/models/qre_models.dart';
+import 'package:qreo/providers/erosqr_provider.dart';
+import 'package:qreo/widgets/bottomnav.dart';
 import 'package:qreo/widgets/custom_button.dart';
 import 'package:supabase_flutter/supabase_flutter.dart.';
 
@@ -18,6 +23,9 @@ class VerifEros extends StatefulWidget {
 class _VerifErosState extends State<VerifEros> {
   final authService = AuthService();
   Qress mQres = Qress();
+  final _miBox = Hive.box('miBox');
+
+  get supabase => null;
 
   @override
   void initState() {
@@ -28,10 +36,12 @@ class _VerifErosState extends State<VerifEros> {
     });
   }
 
+  //
   void loggout() async {
     await authService.signOut();
   }
 
+  //
   getQrEros() async {
     final mSupabase = Supabase.instance.client;
     final mResult = await mSupabase
@@ -44,22 +54,197 @@ class _VerifErosState extends State<VerifEros> {
   }
 
   //
+  confirmarBorrar() {
+    return showModalBottomSheet(
+      context: context,
+      enableDrag: true,
+      backgroundColor: Constants.colorBackgroundPanel,
+      builder: (BuildContext context) {
+        return Container(
+          color: Constants.colorBackgroundPanel,
+          margin: const EdgeInsets.only(
+            left: 20,
+            right: 20,
+            top: 20,
+            bottom: 40,
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SizedBox(
+                width: double.infinity,
+                child: Text(
+                  'Borrar todos los Qrs',
+                  style: Constants.textStyleAccentTitle,
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              const SizedBox(height: 10),
+              SizedBox(
+                child: Text(
+                  '¿Confirmas borrar todos los qrs de la lista?',
+                  style: Constants.textStyleLight,
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              const SizedBox(height: 30),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Flexible(
+                    flex: 1,
+                    child: CustomButton(
+                      width: double.infinity,
+                      color: Constants.colorBlack,
+                      callback: () => Navigator.pop(context),
+                      child: Text(
+                        "Cancelar",
+                        style: Constants.textStyleAccentSemiBold,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 20),
+                  Flexible(
+                    flex: 1,
+                    child: CustomButton(
+                      width: double.infinity,
+                      color: Constants.colorAccent,
+                      callback: () {
+                        llenarListaBorrar();
+                        Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(builder: (context) => BottomNav()),
+                          (Route<dynamic> route) => false,
+                        );
+                      },
+                      child: Text(
+                        "Aceptar",
+                        style: Constants.textStyleBlackBold,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  borrarQr() async {
+    try {
+      if (Provider.of<ErosQrProvider>(context, listen: false).mQre.mRevisado ==
+          false) {
+        // alert
+        customShowToast(globalContext!, 'No fue posible eliminar el registro');
+      } else {
+        // update country into the 'countries' table
+        //progressDialogShow(globalContext!);
+        await supabase.from('erosqrs').delete().eq('revisado', true);
+
+        Timer(const Duration(seconds: 3), () {});
+        dialogDismiss();
+
+        customShowToast(globalContext!, 'Qrs borrados satisfactoriamente');
+      }
+    } catch (e) {
+      // Show error message if the insertion fails
+      customShowToast(globalContext!, 'Error al borrar los Qrs');
+    }
+  }
+
+  Future<void> deleteTask(String taskId) async {
+    final supabase = Supabase.instance.client;
+    await supabase.from('erosqr').delete().eq('idx', taskId);
+  }
+
+  llenarListaBorrar() async {
+    final mSupabase = Supabase.instance.client;
+    int contar = 0;
+    final mResult = await mSupabase
+        .from('erosqr')
+        .select()
+        .eq('revisado', true)
+        .order('fecha', ascending: true);
+    mQres = Qress.fromJsonList(mResult);
+
+    mQres.items.forEach((doc) async {
+      contar = contar + 1;
+      deleteTask(doc.mIdx.toString());
+    });
+  }
+
+  //
+  borrarQrsVeryfic() async {
+    int nreg = int.parse(_miBox.get('reg').toString());
+
+    String idmio = _miBox.get('id1');
+
+    try {
+      for (int index = 1; index < nreg; index++) {
+        String xmio = _miBox.get('id${index}');
+
+        await supabase.from('erosqr').delete().eq('idx', xmio);
+      }
+    } catch (e) {
+      customShowToast(globalContext!, 'Error al guardar la nota: $e');
+    }
+  }
+
+  //
   @override
   Widget build(BuildContext context) {
+    final currentEmail = authService.getCurrentUserEmail();
     return Scaffold(
       backgroundColor: Constants.colorFondo1,
       appBar: AppBar(
         backgroundColor: Constants.colorFondo1,
-        leading: Container(
-          padding: EdgeInsets.symmetric(horizontal: 15),
-          child: Image.asset(
-            'assets/imagenes/logo1.png',
-            width: 50,
-            fit: BoxFit.contain,
-          ),
+        leading: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 15),
+              child: Image.asset(
+                'assets/imagenes/logo1.png',
+                width: 90,
+                fit: BoxFit.cover,
+              ),
+            ),
+          ],
         ),
-        title: Text("Revisados"),
-        leadingWidth: 140,
+        title: Column(
+          children: [
+            Container(
+              padding: EdgeInsets.only(),
+              child: Text(
+                "Revisados",
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ),
+            Container(
+              padding: EdgeInsets.only(),
+              child: Text(
+                currentEmail.toString(),
+                style: TextStyle(
+                  color: Colors.grey,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ],
+        ),
+        leadingWidth: 120,
+        toolbarHeight: 80,
         actions: [
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -68,15 +253,8 @@ class _VerifErosState extends State<VerifEros> {
                 color: Colors.transparent,
                 width: 40,
                 callback: () async {
-                  /*globalContext = context;
-                  deleteConfirmation(
-                    context: globalContext!,
-                    mQr:
-                        Provider.of<ErosQrProvider>(
-                          context,
-                          listen: false,
-                        ).mQre.mIdx!,
-                  );*/
+                  globalContext = context;
+                  confirmarBorrar();
                 },
                 child: Icon(
                   TablerIcons.trash,
@@ -94,14 +272,6 @@ class _VerifErosState extends State<VerifEros> {
                   size: 30,
                 ),
               ),
-
-              /*Container(
-                padding: EdgeInsets.symmetric(horizontal: 20),
-                child: GestureDetector(
-                  onTap: loggout,
-                  child: Icon(Icons.logout),
-                ),
-              ),*/
             ],
           ),
         ],

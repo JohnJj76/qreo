@@ -48,19 +48,39 @@ class _HomeqrOrionState extends State<HomeqrOrion> {
   //
   @override
   Widget build(BuildContext context) {
+    final currentEmail = authService.getCurrentUserEmail();
     return Scaffold(
       backgroundColor: Constants.colorFondo1,
       appBar: AppBar(
         backgroundColor: Constants.colorFondo1,
-        leading: Container(
-          padding: EdgeInsets.symmetric(horizontal: 15),
-          child: Image.asset(
-            'assets/imagenes/logo2.png',
-            width: 50,
-            fit: BoxFit.contain,
-          ),
+        leading: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 15),
+              child: Image.asset(
+                'assets/imagenes/logo2.png',
+                width: 90,
+                fit: BoxFit.cover,
+              ),
+            ),
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 15),
+              child: Text(
+                currentEmail.toString(),
+                style: TextStyle(
+                  color: Colors.grey,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ],
         ),
-        leadingWidth: 140,
+        leadingWidth: 220,
+        toolbarHeight: 80,
         actions: [
           Row(
             mainAxisAlignment: MainAxisAlignment.center,

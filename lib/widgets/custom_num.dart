@@ -5,8 +5,8 @@ import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:qreo/custom/constants.dart';
 import 'package:qreo/custom/library.dart';
 
-class CustomInput extends StatefulWidget {
-  const CustomInput({
+class CustomNum extends StatefulWidget {
+  const CustomNum({
     super.key,
     this.title,
     this.hint,
@@ -18,7 +18,6 @@ class CustomInput extends StatefulWidget {
     this.textInputType,
     this.maxLines,
     this.callback,
-    this.esNumero,
   });
 
   final double? width;
@@ -31,13 +30,12 @@ class CustomInput extends StatefulWidget {
   final TextInputType? textInputType;
   final int? maxLines;
   final Function? callback;
-  final bool? esNumero;
 
   @override
-  State<CustomInput> createState() => _CustomInputState();
+  State<CustomNum> createState() => _CustomNumState();
 }
 
-class _CustomInputState extends State<CustomInput> {
+class _CustomNumState extends State<CustomNum> {
   bool mShowSuffixIcon = false;
   bool mPasswordVisible = false;
 
@@ -66,6 +64,9 @@ class _CustomInputState extends State<CustomInput> {
       alignment: Alignment.topCenter,
       margin: const EdgeInsets.only(bottom: 10),
       child: TextFormField(
+        inputFormatters: [
+          FilteringTextInputFormatter.digitsOnly, // <- Solo dígitos
+        ],
         focusNode: widget.node,
         onChanged: (String text) async {
           if (widget.callback != null) {

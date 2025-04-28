@@ -6,8 +6,8 @@ import 'package:qreo/widgets/custom_button.dart';
 
 enum Tinte { dark, light }
 
-class NavbarBack extends StatelessWidget implements PreferredSizeWidget {
-  const NavbarBack({
+class Navbar2Back extends StatelessWidget implements PreferredSizeWidget {
+  const Navbar2Back({
     super.key,
     this.title,
     this.backgroundColor,
@@ -63,7 +63,7 @@ class NavbarBack extends StatelessWidget implements PreferredSizeWidget {
           Container(
             padding: EdgeInsets.symmetric(horizontal: 15),
             child: Image.asset(
-              'assets/imagenes/logo1.png',
+              'assets/imagenes/logo2.png',
               width: 55,
               height: 40,
             ),

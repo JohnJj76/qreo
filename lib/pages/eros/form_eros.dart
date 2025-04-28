@@ -11,6 +11,7 @@ import 'package:qreo/providers/erosqr_provider.dart';
 import 'package:qreo/widgets/bottomnav.dart';
 import 'package:qreo/widgets/custom_button.dart';
 import 'package:qreo/widgets/custom_input.dart';
+import 'package:qreo/widgets/custom_num.dart';
 import 'package:qreo/widgets/navbar_back.dart';
 import 'package:supabase_flutter/supabase_flutter.dart.';
 
@@ -279,16 +280,17 @@ class _FormErosState extends State<FormEros> {
         customShowToast(globalContext!, 'No fue posible eliminar el registro');
       } else {
         // update country into the 'countries' table
-        progressDialogShow(globalContext!);
+        //progressDialogShow(globalContext!);
         await supabase
-            .from('erosqrs')
+            .from('erosqr')
             .delete()
             .eq(
               'idx',
               Provider.of<ErosQrProvider>(context, listen: false).mQre.mIdx!,
             );
+
         Timer(const Duration(seconds: 3), () {});
-        dialogDismiss();
+        //dialogDismiss();
 
         customShowToast(globalContext!, 'Nota eliminada satisfactoriamente');
       }
@@ -326,10 +328,14 @@ class _FormErosState extends State<FormEros> {
   // ***********************************
   //
   //
-
   @override
   Widget build(BuildContext context) {
     final currentEmail = authService.getCurrentUserEmail();
+    bool bandera = false;
+    if (currentEmail.toString() == 'german@gmail.com') {
+      bandera = true;
+    }
+    ;
     return Scaffold(
       backgroundColor: Constants.colorFondo2,
       appBar: NavbarBack(
@@ -339,8 +345,8 @@ class _FormErosState extends State<FormEros> {
         title:
             Provider.of<ErosQrProvider>(context, listen: false).mQre.mIdx ==
                     null
-                ? "Nuevo QR"
-                : "Editar QR",
+                ? "Agregar nuevo QR"
+                : "Editar actual QR",
         showBack: true,
         mListActions: [
           Provider.of<ErosQrProvider>(context, listen: false).mQre.mIdx == null
@@ -464,9 +470,10 @@ class _FormErosState extends State<FormEros> {
                           const SizedBox(height: 10),
                           Padding(
                             padding: EdgeInsets.symmetric(horizontal: 100),
-                            child: CustomInput(
+                            child: CustomNum(
                               title: 'Factura',
                               controller: mFacturaController,
+                              //keyboardType: TextInputType.number,
                               textInputType: TextInputType.number,
                               validator: (value) {
                                 return mValidation.validate(
@@ -482,7 +489,7 @@ class _FormErosState extends State<FormEros> {
                           const SizedBox(height: 10),
                           Padding(
                             padding: EdgeInsets.symmetric(horizontal: 100),
-                            child: CustomInput(
+                            child: CustomNum(
                               title: 'Valor',
                               controller: mValorController,
                               textInputType: TextInputType.number,
@@ -498,7 +505,9 @@ class _FormErosState extends State<FormEros> {
                             ),
                           ),
                           const SizedBox(height: 10),
-                          jhMySwitch(ancho: 90, estado: cRevisado),
+                          bandera
+                              ? jhMySwitch(ancho: 90, estado: cRevisado)
+                              : Text("--------------------------"),
                           const SizedBox(height: 20),
                           Padding(
                             padding: const EdgeInsets.symmetric(
