@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:qreo/auth/auth_gate.dart';
 import 'package:qreo/custom/configurations.dart';
@@ -15,10 +13,6 @@ Future<void> main() async {
     url: Configurations.mSupabaseUrl,
     anonKey: Configurations.mSupabaseKey,
   );
-  // inicializar Hive
-  await Hive.initFlutter();
-  // abrir la caja
-  var box = await Hive.openBox('miBox');
 
   runApp(
     MultiProvider(

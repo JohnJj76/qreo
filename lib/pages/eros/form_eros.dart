@@ -193,7 +193,31 @@ class _FormErosState extends State<FormEros> {
     setState(() {});
   }
 
-  deleteConfirmation({required BuildContext context, required String mQr}) {
+  //
+  validarUsuarioBorrar({
+    required BuildContext context,
+    required String mQr,
+  }) async {
+    final currentEmail = authService.getCurrentUserEmail();
+
+    //if ( == 'german@gmail.com') {
+    if (currentEmail.toString() != mEmpleadoController.text) {
+      // mensaje
+      customShowToast(
+        globalContext!,
+        'Este usuario no esta autorizado para borrar este QR.',
+      );
+    } else {
+      globalContext = context;
+      borrarConfirmacion(
+        context: globalContext!,
+        mQr: Provider.of<ErosQrProvider>(context, listen: false).mQre.mIdx!,
+      );
+    }
+  }
+
+  //
+  borrarConfirmacion({required BuildContext context, required String mQr}) {
     return showModalBottomSheet(
       context: context,
       enableDrag: true,
@@ -222,7 +246,8 @@ class _FormErosState extends State<FormEros> {
               const SizedBox(height: 10),
               SizedBox(
                 child: Text(
-                  '¿Confirmas borrar $mQr de la lista? ',
+                  //'¿Confirmas borrar $mQr de la lista? ',
+                  '¿Confirmas borrar el QR de la lista?',
                   style: Constants.textStyleLight,
                   textAlign: TextAlign.center,
                 ),
@@ -238,7 +263,7 @@ class _FormErosState extends State<FormEros> {
                       color: Constants.colorBlack,
                       callback: () => Navigator.pop(context),
                       child: Text(
-                        "Atrás",
+                        "Cancelar",
                         style: Constants.textStyleAccentSemiBold,
                       ),
                     ),
@@ -258,7 +283,7 @@ class _FormErosState extends State<FormEros> {
                         );
                       },
                       child: Text(
-                        "Eliminar",
+                        "Aceptar",
                         style: Constants.textStyleBlackBold,
                       ),
                     ),
@@ -356,7 +381,7 @@ class _FormErosState extends State<FormEros> {
                 width: 50,
                 callback: () async {
                   globalContext = context;
-                  deleteConfirmation(
+                  validarUsuarioBorrar(
                     context: globalContext!,
                     mQr:
                         Provider.of<ErosQrProvider>(

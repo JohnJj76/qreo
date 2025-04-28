@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
-import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:qreo/auth/auth_service.dart';
@@ -23,7 +22,6 @@ class VerifEros extends StatefulWidget {
 class _VerifErosState extends State<VerifEros> {
   final authService = AuthService();
   Qress mQres = Qress();
-  final _miBox = Hive.box('miBox');
 
   get supabase => null;
 
@@ -174,23 +172,6 @@ class _VerifErosState extends State<VerifEros> {
       contar = contar + 1;
       deleteTask(doc.mIdx.toString());
     });
-  }
-
-  //
-  borrarQrsVeryfic() async {
-    int nreg = int.parse(_miBox.get('reg').toString());
-
-    String idmio = _miBox.get('id1');
-
-    try {
-      for (int index = 1; index < nreg; index++) {
-        String xmio = _miBox.get('id${index}');
-
-        await supabase.from('erosqr').delete().eq('idx', xmio);
-      }
-    } catch (e) {
-      customShowToast(globalContext!, 'Error al guardar la nota: $e');
-    }
   }
 
   //
