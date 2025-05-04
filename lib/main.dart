@@ -6,6 +6,7 @@ import 'package:qreo/custom/library.dart';
 import 'package:qreo/providers/erosqr_provider.dart';
 
 import 'package:qreo/providers/orionqr_provider.dart';
+import 'package:qreo/providers/qr_provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 Future<void> main() async {
@@ -19,6 +20,7 @@ Future<void> main() async {
       providers: [
         ChangeNotifierProvider(create: (_) => ErosQrProvider()),
         ChangeNotifierProvider(create: (_) => OrionQrProvider()),
+        ChangeNotifierProvider(create: (_) => QrProvider()),
       ],
       child: const MyApp(),
     ),

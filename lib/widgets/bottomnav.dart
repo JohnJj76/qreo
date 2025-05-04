@@ -5,7 +5,9 @@ import 'package:qreo/pages/eros/homeqr_eros.dart';
 import 'package:qreo/pages/eros/verif_eros.dart';
 import 'package:qreo/pages/orion/homeqr_orion.dart';
 import 'package:qreo/pages/orion/verif_orion.dart';
-import 'package:qreo/subir_fotos/upload_page.dart';
+import 'package:qreo/pages/prueva1.dart';
+import 'package:qreo/pages/prueva2.dart';
+//import 'package:qreo/subir_fotos/upload_page.dart';
 
 class BottomNav extends StatefulWidget {
   const BottomNav({super.key});
@@ -16,7 +18,8 @@ class BottomNav extends StatefulWidget {
 
 class _BottomNavState extends State<BottomNav> {
   late List<Widget> pages;
-  late HomeqrEros moteleros;
+  late Prueva2Page prueva1;
+  //late HomeqrEros moteleros;
   late HomeqrOrion motelorion;
   late VerifEros verifEros;
   late VerifOrion verifOrion;
@@ -25,11 +28,12 @@ class _BottomNavState extends State<BottomNav> {
 
   @override
   void initState() {
-    moteleros = HomeqrEros();
+    //moteleros = HomeqrEros();
+    prueva1 = Prueva2Page();
     motelorion = HomeqrOrion();
     verifEros = VerifEros();
     verifOrion = VerifOrion();
-    pages = [moteleros, motelorion, verifEros, verifOrion];
+    pages = [prueva1, motelorion, verifEros, verifOrion];
     super.initState();
   }
 
